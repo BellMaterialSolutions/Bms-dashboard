@@ -1,10 +1,77 @@
-<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>Nike Briefing Portal — BMS</title><style>body{margin:0;background:#0f172a;color:#e5e7eb;font-family:Arial}.wrap{max-width:960px;margin:0 auto;padding:18px}
-.card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:18px;margin:12px 0}input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #1f2937;background:#0c1324;color:#e5e7eb}
-.pinback{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center}.pin{background:#0c1324;border:1px solid #1f2937;border-radius:12px;padding:16px;width:320px}
-.pin input{width:100%;padding:10px;border-radius:8px;border:1px solid #1f2937;background:#0b1222;color:#e5e7eb}.btn{display:inline-block;background:#16a34a;color:#052e1a;font-weight:800;border:1px solid #0b5f38;border-radius:10px;padding:10px 14px;text-decoration:none}</style></head>
-<body><div class='wrap'><div class='card' style='display:flex;gap:12px;align-items:center'><img src='../assets/logo.png' style='height:44px;border-radius:8px'><div><h1 style='margin:0'>Nike Briefing Portal</h1><div style='color:#94a3b8'>PIN required</div></div></div>
-<div class='card'><a class='btn' href='../index.html'>Back to Dashboard</a></div></div>
-<div id='pinback' class='pinback'><div class='pin'><h3 style='margin:0 0 8px 0'>Enter Portal PIN</h3><input id='pin' placeholder='PIN'><div style='margin-top:10px;text-align:right'><button class='btn' onclick='unlock()'>Unlock</button></div><div id='err' style='color:#fca5a5;margin-top:8px;display:none'>Incorrect PIN</div></div></div>
-<script>const REQUIRED_PIN='BMS-NIKE-PORTAL';(function(){ if(sessionStorage.getItem('bms_portal_ok')==='yes') return; document.getElementById('pinback').style.display='flex'; })();function unlock(){ const v=document.getElementById('pin').value.trim(); if(v===REQUIRED_PIN){ sessionStorage.setItem('bms_portal_ok','yes'); document.getElementById('pinback').style.display='none'; } else { document.getElementById('err').style.display='block'; }}</script>
-</body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BMS — Nike Briefing Portal</title>
+<link rel="icon" href="../assets/logo.png">
+<style>
+:root{--bg:#0f172a;--card:#111827;--line:#1f2937;--fg:#e5e7eb;--muted:#94a3b8;--ok:#22c55e;--bad:#ef4444}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Arial}
+.wrap{max-width:860px;margin:0 auto;padding:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.row{display:flex;gap:10px;align-items:center}
+input{width:220px;padding:10px;border-radius:10px;border:1px solid #334155;background:#0b1321;color:var(--fg)}
+button{padding:10px 14px;border-radius:10px;border:1px solid #0b5f38;background:#16a34a;color:#052e1a;font-weight:800;cursor:pointer}
+.err{color:var(--bad);display:none;margin-top:8px}
+.links a{color:#93c5fd;text-decoration:none} .links a:hover{text-decoration:underline}
+.hide{display:none}
+.small{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h2>Nike Briefing Portal</h2>
+  <p class="small">Enter PIN to unlock private materials.</p>
+
+  <div id="gate" class="card">
+    <div class="row">
+      <input id="pin" type="password" placeholder="Enter PIN">
+      <button id="unlock">Unlock</button>
+      <button id="signout" class="hide" style="background:#334155;color:#e5e7eb;border-color:#46566f">Sign out</button>
+    </div>
+    <div id="err" class="err">Incorrect PIN. Try again.</div>
+  </div>
+
+  <div id="content" class="card hide">
+    <h3>Documents</h3>
+    <div class="links">
+      <p><a href="../docs/business_plan/BMS_Business_Plan.pdf" target="_blank">Business Plan (PDF)</a></p>
+      <p><a href="../docs/pitch/BMS_Investor_Pitch_Deck.pdf" target="_blank">Investor Pitch Deck (PDF)</a></p>
+      <p><a href="../docs/investor/Investor_Packet.pdf" target="_blank">Investor Packet (PDF)</a></p>
+      <p><a href="../docs/letters/Grant_Cover_Letter_Nike_ESG.pdf" target="_blank">Nike ESG Cover Letter (PDF)</a></p>
+    </div>
+  </div>
+
+  <p class="small" style="margin-top:16px"><a href="../index.html" style="color:#93c5fd;text-decoration:none">← Back to Dashboard</a></p>
+</div>
+
+<script>
+const PIN_VALUE = "BMS-NIKE-PORTAL"; // change if you want
+const key = "bms_portal_ok";
+
+function show(el, on=true){el.classList[on?'remove':'add']('hide')}
+function boot(){
+  const ok = localStorage.getItem(key)==='1';
+  show(document.getElementById('content'), ok);
+  show(document.getElementById('signout'), ok);
+  show(document.getElementById('gate'), !ok);
+}
+document.getElementById('unlock').onclick = () => {
+  const pin = document.getElementById('pin').value.trim();
+  if(pin === PIN_VALUE){
+    localStorage.setItem(key,'1');
+    document.getElementById('err').style.display='none';
+    boot();
+  }else{
+    document.getElementById('err').style.display='block';
+  }
+};
+document.getElementById('signout').onclick = () => {
+  localStorage.removeItem(key);
+  boot();
+};
+boot();
+</script>
+</body>
+</html>
