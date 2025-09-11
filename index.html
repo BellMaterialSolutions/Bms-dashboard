@@ -1,14 +1,60 @@
-<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>BMS — Executive Dashboard</title><link rel='icon' href='assets/logo.png'>
-<style>body{margin:0;background:#0f172a;color:#e5e7eb;font-family:Arial}.wrap{max-width:1024px;margin:0 auto;padding:18px}
-.card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:18px;margin:12px 0}a{color:#93c5fd}
-.btn{display:inline-block;margin:6px 10px 0 0;background:#16a34a;color:#052e1a;font-weight:800;text-decoration:none;padding:10px 14px;border-radius:10px;border:1px solid #0b5f38}
-.muted{color:#94a3b8}</style></head><body><div class='wrap'>
-<div class='card' style='display:flex;gap:12px;align-items:center'><img src='assets/logo.png' style='height:52px;border-radius:10px'><div>
-<h1 style='margin:0'>Bell Material Solutions — Executive Dashboard</h1><div class='muted'>Interactive ESG portal • Generated Sep 11, 2025</div></div></div>
-<div class='card'><h2 style='margin-top:0'>Quick Access</h2>
-<a class='btn' href='nike.html'>Nike Executive Mode</a>
-<a class='btn' href='roadmap/vertical.html'>30-Day Roadmap</a>
-<a class='btn' href='briefing/index.html'>Briefing Portal</a>
-<a class='btn' href='docs/letters/Grant_Cover_Letter_Nike_ESG.pdf'>Nike ESG Letter (PDF)</a>
-</div></div></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bell Material Solutions — Executive Dashboard</title>
+<link rel="icon" href="assets/logo.png">
+<style>
+:root{--bg:#0f172a;--card:#111827;--line:#1f2937;--fg:#e5e7eb;--muted:#94a3b8;--accent:#22c55e}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Arial}
+.wrap{max-width:1000px;margin:0 auto;padding:20px}
+h1{margin:8px 0 4px} p{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.btn{display:inline-block;margin-top:10px;background:#16a34a;color:#052e1a;font-weight:800;text-decoration:none;
+     padding:10px 14px;border-radius:10px;border:1px solid #0b5f38}
+a.link{color:#93c5fd;text-decoration:none} a.link:hover{text-decoration:underline}
+.header{display:flex;gap:14px;align-items:center}
+.header img{width:42px;height:42px;border-radius:8px}
+.small{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <img src="assets/logo.png" alt="BMS">
+      <div>
+        <h1>Bell Material Solutions — Executive Dashboard</h1>
+        <div class="small">Live build • Links open real pages & PDFs</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Nike Executive Page</h3>
+        <p>Overview tailored for Nike leadership.</p>
+        <a class="btn" href="nike.html">Open Nike Page</a>
+      </div>
+      <div class="card">
+        <h3>30-Day Roadmap</h3>
+        <p>Milestones and owner tracking.</p>
+        <a class="btn" href="roadmap/vertical.html">Open Roadmap</a>
+      </div>
+      <div class="card">
+        <h3>Nike Briefing Portal (PIN)</h3>
+        <p>Private documents for review.</p>
+        <a class="btn" href="briefing/index.html">Enter Portal</a>
+      </div>
+      <div class="card">
+        <h3>Documents</h3>
+        <p>Open the final PDFs directly:</p>
+        <p><a class="link" href="docs/business_plan/BMS_Business_Plan.pdf" target="_blank">Business Plan (PDF)</a></p>
+        <p><a class="link" href="docs/pitch/BMS_Investor_Pitch_Deck.pdf" target="_blank">Investor Pitch Deck (PDF)</a></p>
+        <p><a class="link" href="docs/investor/Investor_Packet.pdf" target="_blank">Investor Packet (PDF)</a></p>
+        <p><a class="link" href="docs/letters/Grant_Cover_Letter_Nike_ESG.pdf" target="_blank">Nike ESG Cover Letter (PDF)</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
