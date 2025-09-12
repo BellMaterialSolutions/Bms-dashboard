@@ -1,0 +1,148 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BMS × Nike — Projections</title>
+<link rel="icon" href="assets/logo.png">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0f172a;--card:#111827;--line:#1f2937;--fg:#e5e7eb;--muted:#94a3b8;--brand:#16a34a}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Arial}
+.wrap{max-width:1100px;margin:0 auto;padding:18px}
+.hdr{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.hdr img{width:42px;height:42px;border-radius:8px}
+.small{color:var(--muted);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.kpi{display:flex;flex-direction:column;gap:4px}
+.kpi .label{color:var(--muted);font-size:13px}
+.kpi .value{font-weight:800;font-size:28px}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-block;background:var(--brand);color:#052e1a;font-weight:800;text-decoration:none;padding:10px 14px;border-radius:10px;border:1px solid #0b5f38}
+.badge{display:inline-block;background:#1f2937;border:1px solid #243244;border-radius:999px;padding:6px 10px;margin:0 6px 6px 0;color:#cbd5e1;text-decoration:none;font-size:12px}
+canvas{width:100%;height:280px}
+.table{width:100%;border-collapse:collapse;font-size:14px}
+.table th,.table td{border-top:1px solid #243244;padding:10px;text-align:left}
+.table th{color:#a3b3c7;font-weight:600}
+.note{color:#94a3b8;font-size:13px}
+</style>
+</head><body><div class="wrap">
+
+  <div class="hdr">
+    <img src="assets/logo.png" alt="BMS">
+    <div>
+      <h1 style="margin:0">BMS × Nike — 24-Month Projections</h1>
+      <div class="small">Assumptions editable inline; charts update automatically.</div>
+    </div>
+  </div>
+
+  <div class="card btnrow">
+    <a class="btn" href="nike.html">← Nike Executive Page</a>
+    <a class="btn" href="index.html">Dashboard</a>
+    <a class="btn" href="briefing/index.html">Briefing Portal (PIN)</a>
+    <span class="badge">Pilot: Footwear & Apparel Offcuts</span>
+    <span class="badge">Region: PNW</span>
+    <span class="badge">Currency: USD</span>
+  </div>
+
+  <!-- KPI row -->
+  <div class="grid">
+    <div class="card kpi"><div class="label">Year-2 Run-Rate Revenue</div><div id="kpiRevenue" class="value">$—</div></div>
+    <div class="card kpi"><div class="label">Annual Tons Diverted (Y2)</div><div id="kpiTons" class="value">— t</div></div>
+    <div class="card kpi"><div class="label">CO₂e Avoided (Y2)</div><div id="kpiCO2" class="value">— t CO₂e</div></div>
+    <div class="card kpi"><div class="label">Gross Margin (Y2)</div><div id="kpiGM" class="value">—%</div></div>
+  </div>
+
+  <!-- Charts -->
+  <div class="card grid">
+    <div class="card"><h3 style="margin-top:0">Revenue by Month</h3><canvas id="revChart"></canvas></div>
+    <div class="card"><h3 style="margin-top:0">Tons Diverted by Month</h3><canvas id="tonsChart"></canvas></div>
+  </div>
+
+  <div class="card grid">
+    <div class="card"><h3 style="margin-top:0">CO₂e Avoided by Month</h3><canvas id="co2Chart"></canvas></div>
+    <div class="card"><h3 style="margin-top:0">Unit Economics</h3>
+      <table class="table">
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>Avg ASP per ton</td><td id="mASP">$—/t</td></tr>
+        <tr><td>Processing cost per ton</td><td id="mCPT">$—/t</td></tr>
+        <tr><td>Gross margin per ton</td><td id="mGMPT">$—/t</td></tr>
+        <tr><td>Payback period (months)</td><td id="mPP">—</td></tr>
+      </table>
+      <div class="note">Assumes linear ramp; adjustable in data section.</div>
+    </div>
+  </div>
+
+  <!-- Assumptions (edit numbers below) -->
+  <div class="card">
+    <h3 style="margin-top:0">Assumptions</h3>
+    <p class="note">Edit the numbers below and refresh the page to update charts.</p>
+    <pre id="assumptions" style="white-space:pre-wrap;background:#0b1321;border:1px solid #223147;border-radius:8px;padding:12px;overflow:auto;color:#dbe5f5;font-size:13px"></pre>
+  </div>
+</div>
+
+<script>
+// ========= Editable Assumptions =========
+const A = {
+  months: 24,
+  startMonth: "Oct 2025",
+  rampTonsMonth1: 40,         // tons in month 1
+  rampMonthlyAdd: 10,         // +tons added each month
+  aspPerTon: 280,             // average selling price per ton (USD)
+  costPerTon: 140,            // processing+logistics per ton (USD)
+  fixedMonthly: 18000,        // fixed OPEX (USD)
+  co2ePerTon: 1.6,            // tCO2e avoided per ton diverted
+  capex: 150000               // for payback estimate (USD)
+};
+// =======================================
+
+function seq(n){return Array.from({length:n},(_,i)=>i)}
+function dollars(v){return "$"+Math.round(v).toLocaleString()}
+function tons(v){return Math.round(v).toLocaleString()+" t"}
+function pct(v){return Math.round(v*100)+"%"}
+
+const months = seq(A.months).map(i=>i+1);
+const tonsArr = months.map(i => Math.max(0, A.rampTonsMonth1 + A.rampMonthlyAdd*(i-1)));
+const revenueArr = tonsArr.map(t => t*A.aspPerTon);
+const costArr = tonsArr.map(t => t*A.costPerTon + A.fixedMonthly);
+const grossArr = revenueArr.map((r,i)=> r - costArr[i]);
+const co2Arr = tonsArr.map(t => t*A.co2ePerTon);
+
+// KPIs (month 24 run-rate and GM)
+const rrRevenue = revenueArr[revenueArr.length-1];
+const rrTons = tonsArr[tonsArr.length-1];
+const rrCO2 = co2Arr[co2Arr.length-1];
+const rrGM = (grossArr[grossArr.length-1] / revenueArr[revenueArr.length-1]) || 0;
+
+document.getElementById('kpiRevenue').textContent = dollars(rrRevenue)+"/mo";
+document.getElementById('kpiTons').textContent = tons(rrTons)+"/mo";
+document.getElementById('kpiCO2').textContent = Math.round(rrCO2).toLocaleString()+" t CO₂e/mo";
+document.getElementById('kpiGM').textContent = pct(rrGM);
+
+// Unit economics
+const gmPerTon = A.aspPerTon - A.costPerTon;
+document.getElementById('mASP').textContent = dollars(A.aspPerTon)+"/t";
+document.getElementById('mCPT').textContent = dollars(A.costPerTon)+"/t";
+document.getElementById('mGMPT').textContent = dollars(gmPerTon)+"/t";
+const monthlyGM = grossArr.reduce((a,b)=>a+b,0)/A.months;
+const payback = A.capex>0 ? Math.max(1, Math.round(A.capex/Math.max(1,monthlyGM))) : "—";
+document.getElementById('mPP').textContent = payback;
+
+// Charts
+const labels = months.map(m=>"M"+m);
+const baseCfg = {
+  type:'line',
+  options:{responsive:true, plugins:{legend:{display:false}}, scales:{x:{grid:{color:'#1f2937'}}, y:{grid:{color:'#1f2937'}}}}
+};
+new Chart(document.getElementById('revChart'), { ...baseCfg,
+  data:{labels, datasets:[{data:revenueArr, borderColor:'#16a34a', tension:.25}]}
+});
+new Chart(document.getElementById('tonsChart'), { ...baseCfg,
+  data:{labels, datasets:[{data:tonsArr, borderColor:'#93c5fd', tension:.25}]}
+});
+new Chart(document.getElementById('co2Chart'), { ...baseCfg,
+  data:{labels, datasets:[{data:co2Arr, borderColor:'#f59e0b', tension:.25}]}
+});
+
+// Show assumptions block for easy copy/edit
+document.getElementById('assumptions').textContent = JSON.stringify(A, null, 2);
+</script>
+</body></html>
