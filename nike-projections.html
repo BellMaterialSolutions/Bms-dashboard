@@ -1,73 +1,97 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>BMS × Nike — Projections</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-  :root{--bg:#0f1a23;--card:#12212c;--text:#dfe7ee;--muted:#a7bac8;--brand:#1db954;--line:#243645}
-  html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
-  .wrap{max-width:1100px;margin:42px auto;padding:0 16px}
-  h1{margin:0 0 18px}
-  .grid{display:grid;gap:18px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  table{width:100%;border-collapse:collapse;font-size:14px}
-  th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left}
-  th{color:var(--muted);font-weight:600}
-  textarea{width:100%;min-height:180px;background:#0a141b;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:12px;font:14px/1.4 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
-  button{background:var(--brand);border:0;border-radius:8px;color:#03200d;font-weight:700;padding:10px 14px;cursor:pointer}
-  .muted{color:var(--muted)}
+  :root{
+    --bg:#0d1822; --panel:#122232; --ink:#eaf1f7; --muted:#a9b6c3;
+    --accent:#2ed3a5; --line:#1c3346; --badge:#1a2c3d; --brand:#26a269;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  a{color:inherit}
+  .wrap{max-width:1100px;margin:28px auto;padding:0 16px}
+  h1{font-size:28px;margin:6px 0 18px}
+  h3{margin:0 0 10px;font-size:16px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  .grid{display:grid;gap:16px}
+  @media (min-width: 960px){ .grid.two{grid-template-columns:1fr 1fr} }
+  .card{background:var(--panel);border-radius:12px;padding:16px;border:1px solid var(--line)}
+  .table{width:100%;border-collapse:collapse;font-size:14px}
+  .table td{padding:10px;border-top:1px solid var(--line)}
+  .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:var(--badge);color:var(--muted);font-size:12px}
+  .buttons{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+  button{appearance:none;border:1px solid var(--line);background:#173145;color:var(--ink);padding:10px 14px;border-radius:10px;font-weight:600}
+  button.primary{background:var(--brand);border-color:transparent;color:#00120a}
+  pre{margin:10px 0 0;white-space:pre;overflow:auto;background:#0f1d2a;border:1px solid var(--line);border-radius:10px;padding:12px;min-height:160px}
+  canvas{width:100% !important;height:260px !important;display:block} /* fixed height prevents runaway scroll */
+  .footer{color:var(--muted);font-size:12px;margin:22px 0 8px;text-align:center}
+
   /* PIN overlay */
-  .gate{position:fixed;inset:0;background:rgba(15,26,35,.96);display:flex;align-items:center;justify-content:center;z-index:50}
-  .panel{width:min(440px,90vw);background:#0e1921;border:1px solid #223544;border-radius:12px;padding:22px}
-  .panel h2{margin:0 0 10px;font-size:20px}
-  .rowpin{display:flex;gap:8px;margin-top:12px}
-  input{flex:1;background:#0a141b;border:1px solid #243645;border-radius:8px;padding:10px;color:var(--text)}
-  .err{color:#ffb3b3;font-size:13px;margin-top:8px;display:none}
+  .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(5,12,18,.92);z-index:9999}
+  .overlay.show{display:flex}
+  .pin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:340px;width:92%}
+  .pin h2{margin:0 0 10px;font-size:18px}
+  .pin p{margin:0 0 14px;color:var(--muted);font-size:14px}
+  .row{display:flex;gap:10px}
+  input[type="password"]{flex:1;background:#0f1d2a;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:16px}
+  .err{color:#ff9aa2;font-size:13px;margin-top:8px;min-height:1em}
 </style>
 </head>
 <body>
+
+<div class="overlay" id="pinOverlay" aria-hidden="true">
+  <div class="pin" role="dialog" aria-modal="true" aria-labelledby="pinTitle">
+    <h2 id="pinTitle">Enter PIN</h2>
+    <p>This page is restricted. Enter the PIN to continue.</p>
+    <form id="pinForm" class="row">
+      <input id="pinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="••••" />
+      <button class="primary" type="submit">Unlock</button>
+    </form>
+    <div id="pinErr" class="err"></div>
+  </div>
+</div>
+
 <div class="wrap">
   <h1>Projections</h1>
 
-  <div class="grid">
-    <div class="row">
-      <div class="card">
-        <h3 style="margin:0 0 8px">Tons Processed by Month</h3>
-        <canvas id="tons"></canvas>
-      </div>
-      <div class="card">
-        <h3 style="margin:0 0 8px">Revenue by Month ($)</h3>
-        <canvas id="rev"></canvas>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="card">
-        <h3 style="margin:0 0 8px">CO₂e Avoided by Month (t)</h3>
-        <canvas id="co2"></canvas>
-      </div>
-      <div class="card">
-        <h3 style="margin:0 0 8px">Unit Economics</h3>
-        <table>
-          <tbody id="unitRows">
-            <tr><th>Avg ASP per ton</th><td id="aspCell">$—/t</td></tr>
-            <tr><th>Processing cost per ton</th><td id="costCell">$—/t</td></tr>
-            <tr><th>Gross margin per ton</th><td id="gmCell">$—/t</td></tr>
-            <tr><th>Payback period (months)</th><td id="pbCell">—</td></tr>
-          </tbody>
-        </table>
-        <p class="muted" style="margin:8px 0 0">Assumes linear ramp; adjustable in data.</p>
-      </div>
-    </div>
-
+  <div class="grid two">
     <div class="card">
-      <h3 style="margin:0 0 8px">Assumptions (edit → Update)</h3>
-      <p class="muted" style="margin:0 0 10px">Edit the JSON below and tap <b>Update</b> to refresh charts and calculations.</p>
-      <textarea id="jsonBox">{
+      <h3>Tons Processed by Month</h3>
+      <canvas id="tonsChart"></canvas>
+      <span class="pill" id="tonsNote">responsive</span>
+    </div>
+    <div class="card">
+      <h3>Revenue by Month ($)</h3>
+      <canvas id="revChart"></canvas>
+    </div>
+  </div>
+
+  <div class="grid two" style="margin-top:16px">
+    <div class="card">
+      <h3>CO₂e Avoided by Month</h3>
+      <canvas id="co2Chart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Unit Economics</h3>
+      <table class="table" aria-label="Unit economics">
+        <tbody>
+          <tr><td>Avg ASP per ton</td><td id="asp">$280/t</td></tr>
+          <tr><td>Processing cost per ton</td><td id="cost">$140/t</td></tr>
+          <tr><td>Gross margin per ton</td><td id="margin">$140/t</td></tr>
+          <tr><td>Payback period (months)</td><td id="payback">—</td></tr>
+        </tbody>
+      </table>
+      <div class="buttons">
+        <button id="logoutPin" title="Require PIN again">Require PIN</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Assumptions (edit and press Update)</h3>
+    <pre id="json" contenteditable="true" spellcheck="false">{
   "months": 24,
   "startMonth": "Oct 2025",
   "rampToMonthly": 40,
@@ -75,112 +99,134 @@
   "aspPerTon": 280,
   "costPerTon": 140,
   "fixedMonthly": 18000,
-  "co2PerTon": 1.6,
+  "co2ePerTon": 1.6,
   "capex": 150000
-}</textarea>
-      <div style="margin-top:10px;display:flex;gap:8px">
-        <button id="updateBtn">Update</button>
-        <span id="errMsg" class="muted"></span>
-      </div>
+}</pre>
+    <div class="buttons">
+      <button id="update" class="primary">Update charts</button>
+      <button id="reset">Reset</button>
     </div>
   </div>
 
-  <p style="margin-top:16px"><a class="muted" href="index.html">← Back to Dashboard</a></p>
+  <div class="footer">© Bell Material Solutions</div>
 </div>
 
-<!-- PIN gate -->
-<div class="gate" id="gate">
-  <div class="panel">
-    <h2>Enter PIN</h2>
-    <p class="muted" style="margin:0 0 8px">This page is restricted.</p>
-    <div class="rowpin">
-      <input id="pin" inputmode="numeric" placeholder="PIN" />
-      <button id="go">Unlock</button>
-    </div>
-    <div id="bad" class="err">Incorrect PIN. Try again.</div>
-  </div>
-</div>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-  // ---------- PIN (same as portal) ----------
+  // ---------- PIN gating ----------
   const REQUIRED_PIN = "2468";
-  function isAuthed(){ try { return localStorage.getItem("bmsPin") === REQUIRED_PIN } catch(e){ return false } }
-  function lock(){ document.getElementById("gate").style.display = "flex"; }
-  function unlock(){ document.getElementById("gate").style.display = "none"; }
-  if(isAuthed()) unlock();
-  document.getElementById("go").onclick = () => {
-    const v = document.getElementById("pin").value.trim();
-    if(v === REQUIRED_PIN){ try{ localStorage.setItem("bmsPin", v) }catch(e){}; unlock(); }
-    else { document.getElementById("bad").style.display = "block"; }
-  };
+  const overlay = document.getElementById('pinOverlay');
+  function showPin(){ overlay.classList.add('show'); }
+  function hidePin(){ overlay.classList.remove('show'); }
+  function requirePin(){
+    if(sessionStorage.getItem('bms_pin') !== REQUIRED_PIN) showPin();
+  }
+  requirePin();
+  document.getElementById('pinForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const val = document.getElementById('pinInput').value.trim();
+    if(val === REQUIRED_PIN){ sessionStorage.setItem('bms_pin', REQUIRED_PIN); hidePin(); }
+    else document.getElementById('pinErr').textContent = "Incorrect PIN";
+  });
+  document.getElementById('logoutPin').addEventListener('click', ()=>{
+    sessionStorage.removeItem('bms_pin');
+    showPin();
+  });
 
-  // ---------- Charts + calculations ----------
-  const tonsCtx = document.getElementById('tons');
-  const revCtx  = document.getElementById('rev');
-  const co2Ctx  = document.getElementById('co2');
+  // ---------- Assumptions + charts ----------
+  const defaultAssumptions = {
+    months: 24, startMonth: "Oct 2025",
+    rampToMonthly: 40, rampMonthlyAdd: 10,
+    aspPerTon: 280, costPerTon: 140, fixedMonthly: 18000,
+    co2ePerTon: 1.6, capex: 150000
+  };
+  const pre = document.getElementById('json');
+  const clamp = (n,min,max)=>Math.max(min,Math.min(max,n));
+
+  function monthLabels(n, start){
+    const M = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    let [mon, yrRaw] = (start||"Oct 2025").split(" ");
+    let i = Math.max(0, M.findIndex(m => mon.startsWith(m)));
+    let yr = parseInt(yrRaw, 10) || 2025;
+    const labels = [];
+    for(let k=0;k<n;k++){ labels.push(M[i]+" "+yr); i++; if(i===12){i=0; yr++;} }
+    return labels;
+  }
+
+  function compute(a){
+    const months = clamp(+a.months||24, 1, 60);
+    const labels = monthLabels(months, a.startMonth);
+    let tons = [], revenue = [], co2 = [];
+    let current = 0;
+    for(let m=0;m<months;m++){
+      current = Math.min(a.rampToMonthly, (m===0? a.rampMonthlyAdd : current + a.rampMonthlyAdd));
+      tons.push(current);
+      revenue.push(current * a.aspPerTon);
+      co2.push(current * a.co2ePerTon);
+    }
+    const grossPerMonth = a.rampToMonthly*a.aspPerTon - a.rampToMonthly*a.costPerTon - a.fixedMonthly;
+    const payback = grossPerMonth > 0 ? Math.round(a.capex / grossPerMonth) : "—";
+    return {labels, tons, revenue, co2, payback};
+  }
 
   let tonsChart, revChart, co2Chart;
+  function draw(a){
+    const {labels, tons, revenue, co2, payback} = compute(a);
+    // Unit econ
+    document.getElementById('asp').textContent = `$${a.aspPerTon.toLocaleString()}/t`;
+    document.getElementById('cost').textContent = `$${a.costPerTon.toLocaleString()}/t`;
+    document.getElementById('margin').textContent = `$${(a.aspPerTon-a.costPerTon).toLocaleString()}/t`;
+    document.getElementById('payback').textContent = payback;
 
-  function calcSeries(cfg){
-    const m = cfg.months|0;
-    const labels = Array.from({length:m},(_,i)=>`M${i+1}`);
-    const tons = [];
-    // Simple linear ramp to target, then flat
-    for(let i=0;i<m;i++){
-      const t = Math.min(cfg.rampToMonthly, cfg.rampMonthlyAdd*(i+1));
-      tons.push(t);
-    }
-    const revenue = tons.map(t=>t*cfg.aspPerTon);
-    const marginPerTon = cfg.aspPerTon - cfg.costPerTon;
-    const margin = tons.map((t,i)=> t*marginPerTon - cfg.fixedMonthly);
-    // Payback: cumulative margin vs capex
-    let cum = 0, pb = m;
-    for(let i=0;i<m;i++){ cum += margin[i]; if(cum>=cfg.capex){ pb = i+1; break; } }
-    const co2 = tons.map(t=> t*cfg.co2PerTon);
-    return {labels, tons, revenue, co2, pb, marginPerTon};
+    // Destroy old charts before re-draw (prevents runaway canvas height)
+    for(const c of [tonsChart, revChart, co2Chart]){ if(c) c.destroy(); }
+    const baseOpts = {responsive:true, maintainAspectRatio:false,
+      scales:{x:{ticks:{autoSkip:true,maxRotation:0}}, y:{beginAtZero:true}},
+      plugins:{legend:{display:false}, tooltip:{mode:'index', intersect:false}}
+    };
+    tonsChart = new Chart(document.getElementById('tonsChart'), {
+      type:'line', data:{labels, datasets:[{data:tons, borderWidth:2, tension:.25}]}, options: baseOpts
+    });
+    revChart = new Chart(document.getElementById('revChart'), {
+      type:'line', data:{labels, datasets:[{data:revenue, borderWidth:2, tension:.25}]}, options: baseOpts
+    });
+    co2Chart = new Chart(document.getElementById('co2Chart'), {
+      type:'line', data:{labels, datasets:[{data:co2, borderWidth:2, tension:.25}]}, options: baseOpts
+    });
   }
 
-  function draw(cfg){
-    const s = calcSeries(cfg);
-
-    // Unit econ table
-    document.getElementById('aspCell').textContent  = `$${cfg.aspPerTon}/t`;
-    document.getElementById('costCell').textContent = `$${cfg.costPerTon}/t`;
-    document.getElementById('gmCell').textContent   = `$${s.marginPerTon}/t`;
-    document.getElementById('pbCell').textContent   = s.pb;
-
-    const opts = {responsive:true, maintainAspectRatio:false, scales:{x:{ticks:{color:"#9fb3c3"}}, y:{ticks:{color:"#9fb3c3"}, grid:{color:"#1e3240"}}}, plugins:{legend:{display:false}}};
-
-    if(tonsChart) tonsChart.destroy();
-    if(revChart) revChart.destroy();
-    if(co2Chart) co2Chart.destroy();
-
-    tonsChart = new Chart(tonsCtx, {type:'line', data:{labels:s.labels, datasets:[{data:s.tons} ]}, options:opts});
-    revChart  = new Chart(revCtx,  {type:'line', data:{labels:s.labels, datasets:[{data:s.revenue}]}, options:opts});
-    co2Chart  = new Chart(co2Ctx,  {type:'line', data:{labels:s.labels, datasets:[{data:s.co2}]}, options:opts});
-  }
-
-  function parseJSON(){
-    const raw = document.getElementById('jsonBox').value;
+  function getAssumptions(){
     try{
-      const cfg = JSON.parse(raw);
-      // Basic sanity defaults
-      return Object.assign({
-        months:24, rampToMonthly:40, rampMonthlyAdd:10, aspPerTon:280, costPerTon:140, fixedMonthly:18000, co2PerTon:1.6, capex:150000
-      }, cfg);
+      // Strip stray NBSP etc. that iPad often inserts when editing
+      const clean = pre.innerText.replace(/\u00A0/g,' ').trim();
+      const a = JSON.parse(clean);
+      // sanitize
+      a.months = clamp(+a.months||24, 1, 60);
+      a.rampToMonthly = clamp(+a.rampToMonthly||40, 1, 500);
+      a.rampMonthlyAdd = clamp(+a.rampMonthlyAdd||10, 1, 200);
+      a.aspPerTon = +a.aspPerTon||280;
+      a.costPerTon = +a.costPerTon||140;
+      a.fixedMonthly = +a.fixedMonthly||18000;
+      a.co2ePerTon = +a.co2ePerTon||1.6;
+      a.capex = +a.capex||150000;
+      return a;
     }catch(e){
-      document.getElementById('errMsg').textContent = "Invalid JSON – please fix format.";
-      throw e;
+      alert("Fix the JSON format first (double quotes, commas between lines).");
+      return null;
     }
   }
 
-  document.getElementById('updateBtn').onclick = ()=>{
-    document.getElementById('errMsg').textContent = "";
-    try{ draw(parseJSON()); }catch(e){}
-  };
+  document.getElementById('update').addEventListener('click', ()=>{
+    const a = getAssumptions(); if(a) draw(a);
+  });
+  document.getElementById('reset').addEventListener('click', ()=>{
+    pre.innerText = JSON.stringify(defaultAssumptions, null, 2);
+    draw(defaultAssumptions);
+  });
 
-  // Initial render
-  draw(parseJSON());
+  // initial paint
+  pre.innerText = JSON.stringify(defaultAssumptions, null, 2);
+  draw(defaultAssumptions);
 </script>
 </body>
 </html>
