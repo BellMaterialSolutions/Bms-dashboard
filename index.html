@@ -1,67 +1,34 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bell Material Solutions — Executive Dashboard</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="icon" href="assets/logo.png">
-  <style>
-    :root{--bg:#0f1720;--card:#131c26;--text:#e8eef4;--muted:#a8b3bf;--accent:#17a34a;}
-    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-    .wrap{max-width:900px;margin:40px auto;padding:0 16px}
-    header{display:flex;align-items:center;gap:16px;margin-bottom:24px}
-    header img{width:56px;height:56px}
-    h1{font-size:28px;margin:0} h2{font-size:20px;margin:0 0 10px}
-    .card{background:var(--card);border:1px solid #203243;border-radius:12px;padding:18px;margin:18px 0}
-    .btn{display:inline-block;margin:8px 10px 0 0;padding:10px 14px;border-radius:8px;
-         background:var(--accent);color:#04250e;text-decoration:none;font-weight:600}
-    .btn:focus,.btn:hover{outline:0;filter:brightness(1.05)}
-    code,pre{background:#0c141c;color:#cfe6ff;border:1px solid #1e2d3a;border-radius:8px;padding:10px;display:block;overflow:auto}
-    footer{color:var(--muted);font-size:13px;margin:28px 0;text-align:center}
-    .muted{color:var(--muted)}
-    nav a{color:#9fd6b2;text-decoration:none;margin-right:12px}
-    nav a:hover{color:#c6f1d3}
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <img src="assets/logo.png" alt="Bell Material Solutions Logo">
-      <div>
-        <h1>Bell Material Solutions — Executive Dashboard</h1>
-        <div class="muted">Quick links to live pages and final PDFs</div>
-      </div>
-    </header>
+  <div class="container">
+    <h1>Bell Material Solutions — Executive Dashboard</h1>
+    <p>Quick links to live pages and final PDFs</p>
 
     <div class="card">
-      <h2>Pages</h2>
-      <nav>
-        <a href="nike.html" target="_blank" rel="noopener">Nike Briefing</a>
-        <a href="nike-projections.html" target="_blank" rel="noopener">Nike Projections</a>
-        <a href="roadmap/vertical.html" target="_blank" rel="noopener">30-Day Roadmap</a>
-      </nav>
+      <h3>Pages</h3>
+      <a class="btn" href="nike.html" target="_blank">Nike Briefing</a>
+      <a class="btn" href="nike-projections.html" target="_blank">Nike Projections</a>
+      <a class="btn" href="roadmap/index.html" target="_blank">30-Day Roadmap</a>
     </div>
 
     <div class="card">
-      <h2>Documents</h2>
-      <div class="muted">Open the final PDFs directly:</div>
-      <p>
-        <a class="btn" href="docs/business_plan/BMS_Business_Plan.pdf" target="_blank" rel="noopener">Business Plan (PDF)</a>
-        <a class="btn" href="docs/investor/Investor_Packet.pdf" target="_blank" rel="noopener">Investor Packet (PDF)</a>
-        <a class="btn" href="docs/pitch/Investor_Pitch_Deck.pdf" target="_blank" rel="noopener">Investor Pitch Deck (PDF)</a>
-        <a class="btn" href="docs/letters/Grant_Cover_Letter_Nike_ESG.pdf" target="_blank" rel="noopener">Nike ESG Cover Letter (PDF)</a>
-      </p>
-
-      <details>
-        <summary class="muted">Show direct URLs (copy/paste)</summary>
-<pre><code>/docs/business_plan/BMS_Business_Plan.pdf
-/docs/investor/Investor_Packet.pdf
-/docs/pitch/Investor_Pitch_Deck.pdf
-/docs/letters/Grant_Cover_Letter_Nike_ESG.pdf</code></pre>
-      </details>
+      <h3>Documents</h3>
+      <p>Open the final PDFs directly:</p>
+      <a class="btn" href="docs/business_plan/BMS_Business_Plan.pdf" target="_blank">Business Plan (PDF)</a>
+      <a class="btn" href="docs/investor/Investor_Packet.pdf" target="_blank">Investor Packet (PDF)</a>
+      <a class="btn" href="docs/letters/Grant_Cover_Letter_Nike_ESG.pdf" target="_blank">Nike ESG Cover Letter (PDF)</a>
     </div>
 
-    <footer>© Bell Material Solutions</footer>
+    <footer>
+      <p>© Bell Material Solutions</p>
+    </footer>
   </div>
 </body>
 </html>
