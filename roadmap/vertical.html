@@ -5,84 +5,102 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>BMS — 30-Day Roadmap</title>
 <style>
-  :root{
-    --bg:#0e1a22; --panel:#0f2532; --text:#d9e6ee; --muted:#8ca8b8;
-    --accent:#2dd4bf; --accent2:#22c55e; --border:#244553;
+  body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    background: #0e1a22;
+    color: #e6edf3;
+    margin: 0;
+    padding: 0;
   }
-  *{box-sizing:border-box} html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-  .wrap{max-width:980px;margin:24px auto;padding:0 16px}
-  h1{font-size:28px;margin:20px 0}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;margin:14px 0}
-  .phase{border-left:4px solid var(--accent);padding-left:12px}
-  .phase h2{margin:0 0 6px 0;font-size:18px}
-  .tasks{margin:8px 0 0 0;padding:0;list-style:none}
-  .tasks li{padding:8px 10px;border:1px solid var(--border);border-radius:10px;margin:8px 0;background:#0f2a39}
-  .badge{display:inline-block;font-size:12px;background:var(--accent2);color:#082318;border-radius:999px;padding:3px 8px;margin-left:8px}
-  .back{display:inline-block;margin-top:10px;color:var(--accent);text-decoration:none}
-  a.link{color:var(--accent)}
-  footer{color:var(--muted);font-size:12px;text-align:center;margin:22px 0}
-  details{border:1px dashed var(--border);border-radius:10px;padding:10px;margin-top:8px;background:#0d2230}
-  summary{cursor:pointer;user-select:none}
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .timeline {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #244553;
+  }
+  .timeline-item {
+    position: relative;
+    margin: 20px 0;
+    padding-left: 60px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #22c55e;
+    border: 2px solid #0e1a22;
+  }
+  .timeline-item h2 {
+    margin: 0 0 5px;
+    font-size: 18px;
+    color: #2dd4bf;
+  }
+  .timeline-item p {
+    margin: 0 0 10px;
+    font-size: 15px;
+  }
+  a.back {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #2dd4bf;
+    text-decoration: none;
+  }
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: #8ca8b8;
+    margin-top: 40px;
+  }
 </style>
 </head>
 <body>
   <div class="wrap">
     <a class="back" href="../index.html">← Back to Dashboard</a>
     <h1>30-Day Roadmap</h1>
-
-    <div class="card phase">
-      <h2>Phase 1 — Pre-Launch (Days 1–3) <span class="badge">Done</span></h2>
-      <ul class="tasks">
-        <li>Finalize logo, document templates, and file structure</li>
-        <li>Set up GitHub Pages and working dashboard links</li>
-      </ul>
-    </div>
-
-    <div class="card phase">
-      <h2>Phase 2 — Nike ESG Briefing (Days 3–10)</h2>
-      <ul class="tasks">
-        <li>Polished PDFs live: 
-          <a class="link" href="../docs/business_plan/BMS_Business_Plan.pdf" target="_blank">Business Plan</a>, 
-          <a class="link" href="../docs/investor/Investor_Packet.pdf" target="_blank">Investor Packet</a>, 
-          <a class="link" href="../docs/letters/Grant_Cover_Letter_Nike_ESG.pdf" target="_blank">Nike ESG Letter</a>
-        </li>
-        <li>Run through demo with projections page</li>
-      </ul>
-    </div>
-
-    <div class="card phase">
-      <h2>Phase 3 — Grants (Days 8–20)</h2>
-      <ul class="tasks">
-        <li>Prepare targeted grant shortlist & submission calendar</li>
-        <li>Lock reporting framework (diversion, CO₂e, unit economics)</li>
-      </ul>
-    </div>
-
-    <div class="card phase">
-      <h2>Phase 4 — Investors (Days 15–25)</h2>
-      <ul class="tasks">
-        <li>Investor conversations with Packet + Projections</li>
-        <li>Track feedback and refine ask/terms</li>
-      </ul>
-    </div>
-
-    <div class="card phase">
-      <h2>Phase 5 — Launch (Days 20–30)</h2>
-      <ul class="tasks">
-        <li>Confirm pilot scope & timeline with Nike</li>
-        <li>Stand up ops & reporting cadence</li>
-      </ul>
-      <details>
-        <summary>Direct URLs (copy/paste)</summary>
-        <div style="margin-top:8px">
-          <div>Business Plan — <code>/docs/business_plan/BMS_Business_Plan.pdf</code></div>
-          <div>Investor Packet — <code>/docs/investor/Investor_Packet.pdf</code></div>
-          <div>Nike ESG Letter — <code>/docs/letters/Grant_Cover_Letter_Nike_ESG.pdf</code></div>
-          <div>Dashboard — <code>/index.html</code></div>
-        </div>
-      </details>
-    </div>
-
+    <ul class="timeline">
+      <li class="timeline-item">
+        <h2>Phase 1 — Pre-Launch (Days 1–3)</h2>
+        <p>Finalize logo, templates, and file structure. GitHub Pages live.</p>
+      </li>
+      <li class="timeline-item">
+        <h2>Phase 2 — Nike ESG Briefing (Days 3–10)</h2>
+        <p>Deliver polished PDFs (Business Plan, Investor Packet, Nike ESG Letter). Demo projections page.</p>
+      </li>
+      <li class="timeline-item">
+        <h2>Phase 3 — Grants (Days 8–20)</h2>
+        <p>Submit grant applications. Lock reporting framework for diversion, CO₂e, and unit economics.</p>
+      </li>
+      <li class="timeline-item">
+        <h2>Phase 4 — Investors (Days 15–25)</h2>
+        <p>Investor conversations using Packet + Projections. Collect feedback and refine terms.</p>
+      </li>
+      <li class="timeline-item">
+        <h2>Phase 5 — Launch (Days 20–30)</h2>
+        <p>Confirm Nike pilot scope and timeline. Stand up operations and reporting cadence.</p>
+      </li>
+    </ul>
     <footer>© Bell Material Solutions</footer>
   </div>
 </body>
