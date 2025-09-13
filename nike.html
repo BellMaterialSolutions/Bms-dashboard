@@ -1,17 +1,86 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Nike Executive Mode — BMS</title><link rel="icon" href="assets/logo.png">
-<style>body{margin:0;background:#0f172a;color:#e5e7eb;font-family:system-ui,Arial}.wrap{max-width:1000px;margin:0 auto;padding:20px}
-.card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:16px;margin:12px 0}
-.btn{display:inline-block;margin:6px 10px 0 0;background:#16a34a;color:#052e1a;font-weight:800;text-decoration:none;padding:10px 14px;border-radius:10px;border:1px solid #0b5f38}
-a{color:#93c5fd}</style></head><body>
-<div class="wrap">
-  <div class="card"><h1 style="margin:0">Nike Executive Brief</h1><p>Partnering to accelerate Move to Zero.</p></div>
-  <div class="card"><h3>Quick Links</h3>
-    <a class="btn" href="docs/letters/Grant_Cover_Letter_Nike_ESG.pdf" target="_blank">ESG Letter (PDF)</a>
-    <a class="btn" href="roadmap/vertical.html">Roadmap</a>
-    <a class="btn" href="briefing/index.html">Briefing Portal (PIN)</a>
-    <a class="btn" href="index.html">Back to Dashboard</a>
-    <a class="btn" href="nike-projections.html">Projections</a>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BMS × Nike — Briefing Portal</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0f1a23; --card:#12212c; --text:#dfe7ee; --muted:#a7bac8; --brand:#1db954; }
+    html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    .wrap{max-width:920px;margin:48px auto;padding:0 16px}
+    h1{font-size:28px;margin:0 0 18px}
+    .card{background:var(--card);border:1px solid #1b2d3a;border-radius:12px;padding:20px}
+    a{color:var(--text);text-decoration:none}
+    .list a{display:block;padding:10px 12px;border-radius:8px;border:1px solid #233645;margin:10px 0}
+    .list a:hover{background:#152533}
+    .back{margin-top:14px;display:inline-block;color:var(--muted)}
+    /* PIN overlay */
+    .gate{position:fixed;inset:0;background:rgba(15,26,35,.96);display:flex;align-items:center;justify-content:center;z-index:50}
+    .panel{width:min(440px,90vw);background:#0e1921;border:1px solid #223544;border-radius:12px;padding:22px}
+    .panel h2{margin:0 0 10px;font-size:20px}
+    .row{display:flex;gap:8px;margin-top:12px}
+    input{flex:1;background:#0a141b;border:1px solid #243645;border-radius:8px;padding:10px;color:var(--text)}
+    button{background:var(--brand);border:0;border-radius:8px;color:#03200d;font-weight:700;padding:10px 14px;cursor:pointer}
+    .err{color:#ffb3b3;font-size:13px;margin-top:8px;display:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Nike Briefing Portal</h1>
+    <p style="color:var(--muted)">Enter PIN to unlock private materials.</p>
+
+    <div class="card">
+      <div class="list">
+        <!-- Pitch Deck link removed on purpose -->
+        <a href="docs/business_plan/BMS_Business_Plan.pdf" target="_blank">Business Plan (PDF)</a>
+        <a href="docs/investor/Investor_Packet.pdf" target="_blank">Investor Packet (PDF)</a>
+        <a href="docs/letters/Grant_Cover_Letter_Nike_ESG.pdf" target="_blank">Nike ESG Cover Letter (PDF)</a>
+      </div>
+    </div>
+
+    <a class="back" href="index.html">← Back to Dashboard</a>
   </div>
-</div></body></html>
+
+  <!-- PIN gate -->
+  <div class="gate" id="gate">
+    <div class="panel">
+      <h2>Enter PIN</h2>
+      <p style="color:var(--muted);margin:0 0 8px">This portal is restricted.</p>
+      <div class="row">
+        <input id="pin" inputmode="numeric" autocomplete="one-time-code" placeholder="PIN" />
+        <button id="go">Unlock</button>
+      </div>
+      <div id="bad" class="err">Incorrect PIN. Try again.</div>
+    </div>
+  </div>
+
+  <script>
+    // Keep using your existing PIN (same as before)
+    const REQUIRED_PIN = "2468"; // <- unchanged
+
+    function isAuthed(){
+      try{ return localStorage.getItem("bmsPin") === REQUIRED_PIN }catch(e){ return false }
+    }
+    function lock(){
+      document.getElementById("gate").style.display = "flex";
+    }
+    function unlock(){
+      document.getElementById("gate").style.display = "none";
+    }
+
+    if(isAuthed()) unlock();
+
+    document.getElementById("go").onclick = () => {
+      const v = document.getElementById("pin").value.trim();
+      if(v === REQUIRED_PIN){
+        try{ localStorage.setItem("bmsPin", v) }catch(e){}
+        unlock();
+      }else{
+        document.getElementById("bad").style.display = "block";
+      }
+    };
+  </script>
+</body>
+</html>
